@@ -18,11 +18,11 @@ def index(request):
 def register(request):
     if request.method=='POST':
         errors=User.objects.register_validation(request.POST)
-        request.session['first_name']=request.POST['first_name']
-        request.session['last_name']=request.POST['last_name']
-        request.session['email']=request.POST['email']
-        request.session['dob']=request.POST['dob']
         if len(errors):
+            request.session['first_name']=request.POST['first_name']
+            request.session['last_name']=request.POST['last_name']
+            request.session['email']=request.POST['email']
+            request.session['dob']=request.POST['dob']
             for key,value in errors.items():
                 messages.error(request,value,extra_tags='register')
             return redirect('/')
