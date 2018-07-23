@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+        <!-- <style>
+            *{
+                outline: 2px dotted red;
+            }
+        </style> -->
+        <title>Quotes!</title>
+    </head>
+    <body>
+        <div class="container mx-auto">
+            <nav class="navbar navbar-dark bg-dark mb-3">
+                <a class="navbar-brand" href="/">CodingDojo Quotes!</a>
+                <a class="nav-link text-light col-sm-8 text-right" href="/myaccount/{{request.session.user_id}}">Edit My Account</a>
+                <a class="nav-link text-light text-right col-sm-1" href="/logout">log off</a>
+            </nav>
+            {% for message in messages%}
+                {%if 'success' in message.tags%}
+                <p class="alert-success text-center">{{message}}</p>
+                {%endif%}
+            {% endfor%}
+            <h5>Welcome, {{request.session.first_name}}!</h5>
+            <div class="row mt-5">
+                <div class="col-md-8">
+                    <h6>Quotes:</h6>
+                    {%for quote in quotes reversed%}
+                    <div class="bg-light m-3 shadow rounded p-3">
+                        <p>
+                            <span class="font-weight-bold">{{quote.author}}:</span> <span class="ml-3 font-italic">"{{quote.quote}}"</span>
+                        </p>
+                        <p>Posted by:<a href="/user/{{quote.posted_by.id}}">{{quote.posted_by.first_name}} {{quote.posted_by.last_name}}</a></p>
+                        <p>{{quote.likes.count}} people like this <a class="btn btn-danger ml-5 shadow rounded" href="/quotes/{{quote.id}}/like">Like!</a></p>
+                        {%if quote.posted_by.id == request.session.user_id%}
+                            <a href="/quotes/{{quote.id}}/delete">delete</a>
+                        {%endif%}
+                    </div>
+                    {%endfor%}
+                </div>
+                <div class="col-md-4">
+                    <h6>Add a Quote!</h6>
+                    {% for message in messages%}
+                    {%if 'quote' in message.tags%}
+                    <p class="text-danger text-center">{{message}}</p>
+                    {%endif%}
+                    {% endfor%}
+                    <div class="col-sm-11 m-3 p-3 bg-secondary shadow rounded">
+                        <form action='/quotes/addquote/' method='POST'>
+                            {%csrf_token%}
+                            <div class="form-group">
+                                <label for="author">Author:</label>
+                                <input type="text" class="form-control" name="author" value="{{request.session.author}}">
+                            </div>
+                            <div class="form-group">
+                                <label for="quote">Quote:</label>
+                                <textarea class="form-control" name="quote" rows="3">{{request.session.quote}}</textarea>
+                            </div>
+                            <div class="form-group">
+                                <input class="btn btn-primary shadow rounded" type="submit" value="Submit">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

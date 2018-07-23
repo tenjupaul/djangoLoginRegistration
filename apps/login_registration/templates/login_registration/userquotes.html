@@ -8,17 +8,29 @@
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
-        <title>Login and Registration</title>
+        <!-- <style>
+            *{
+                outline: 2px dotted red;
+            }
+        </style> -->
+        <title>Quotes!</title>
     </head>
     <body>
-        <div class="container mx-auto">
-            <div class="jumbotron jumbotron-fluid">
-                <div class="container">
-                    <h3>Success! Welcome, {{request.session.first_name}}!</h3>
-                    {% for message in messages%}
-                        <p class="text-success">{{message}}</p>
-                    {% endfor%}
+        <div class="container">
+            <nav class="navbar navbar-dark bg-dark mb-3">
+                <a class="navbar-brand" href="/">CodingDojo Quotes!</a>
+                <a class="nav-link text-light col-sm-8 text-right" href="/">Home</a>
+                <a class="nav-link text-light text-right col-sm-1" href="/logout">log off</a>
+            </nav>
+            <div class="row mt-5 ml-2">
+                <h6>{{user.first_name}} {{user.last_name}}'s Quotes:</h6>
+                {%for quote in user.quotes.all%}
+                <div class="bg-secondary text-light mt-3 shadow rounded p-3">
+                    <p>
+                        <span class="font-weight-bold">{{quote.author}}:</span> <span class="font-italic">"{{quote.quote}}"</span>
+                    </p>
                 </div>
+                {%endfor%}
             </div>
         </div>
     </body>
